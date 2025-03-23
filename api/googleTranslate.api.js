@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url'
 import { Logger } from '../utils/logger.utils.js'
 import * as dotenv from 'dotenv'
 
-dotenv.config({ path: `.env${process.env.NODE_ENV}` })
+dotenv.config({ path: '.env' })
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 class GoogleTranslate {

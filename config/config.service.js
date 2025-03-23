@@ -4,7 +4,7 @@ import { Logger } from '../utils/logger.utils.js'
 import fsPromises from 'fs/promises'
 import * as dotenv from 'dotenv'
 
-dotenv.config({ path: `.env${process.env.NODE_ENV}` })
+dotenv.config({ path: '.env' })
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 class Config{
@@ -12,7 +12,12 @@ class Config{
 		try {
 			let yandex = false
 			if (process.env.VOICE_RESPONSE === 'true' && process.env.SPEECH_TO_TEXT_MODE === 'yandex' || process.env.TEXT_TO_SPEECH_MODE === 'yandex') yandex = true
-			const requiredFields = ['TELEGRAM_BOT_TOKEN', 'OPENAI_API_KEY', yandex === true ? 'YANDEX_API_KEY' : '']
+			const requiredFields = ['TELEGRAM_BOT_TOKEN', 'OPENAI_API_KEY']
+
+			if (yandex) {
+				requiredFields.push('YANDEX_API_KEY');
+			}
+			
 			const settingFields = [
 				'VOICE_RESPONSE', 'SPEECH_TO_TEXT_MODE', 'TEXT_TO_SPEECH_MODE', 'SAVE_CHAT_HISTORY', 'SAVE_VOICE_HISTORY',
 				'VOICE_SPEED_NORMAL', 'VOICE_SPEED_SLOW', 'VOICE_SPEED_FAST'
@@ -33,7 +38,7 @@ class Config{
 				}
 				if (key === 'TEXT_TO_SPEECH_MODE') {
 					const ttsMode = this.get(key)
-					if ( ttsMode !== 'google' && ttsMode !== 'yandex' && ttsMode !== 'any' ) throw new Error(`'TEXT_TO_SPEECH_MODE': 'google', 'yandex' or 'any'`)
+					if ( ttsMode !== 'google' && ttsMode !== 'yandex' && ttsMode !== 'openai' && ttsMode !== 'any' ) throw new Error(`'TEXT_TO_SPEECH_MODE': 'google', 'yandex' or 'any'`)
 				}
 				if (key === 'SAVE_CHAT_HISTORY') {
 					const saveMode = this.get(key)

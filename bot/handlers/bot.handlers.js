@@ -164,6 +164,15 @@ class BotHandlers {
 						await utils.deleteDir(dirRes)
 					}
 				}
+				if (config.get('TEXT_TO_SPEECH_MODE') === 'openai') {
+					response = await openAi.textToSpeech(translation);
+
+					await ctx.replyWithAudio({source: response})
+					if (config.get('SAVE_VOICE_HISTORY') === 'request' || config.get('SAVE_VOICE_HISTORY') === 'false') {
+						await utils.deleteFile(response)
+						await utils.deleteDir(dirRes)
+					}
+				}
 			}
 			return response
 		} catch (err) {

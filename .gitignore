@@ -4,6 +4,7 @@
 /log/*
 !log/do_not_delete_this_directory
 /audio/*
+/audio/request/*
 !audio/request
 !audio/response
 !audio/request/do_not_delete_this_directory

@@ -8,7 +8,7 @@ import axios from 'axios'
 import * as dotenv from 'dotenv'
 import {utils} from "../utils/utils.js";
 
-dotenv.config({ path: `.env${process.env.NODE_ENV}` })
+dotenv.config({ path: '.env' })
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const YANDEX_API_KEY = process.env.YANDEX_API_KEY
 

@@ -3,7 +3,7 @@ import { yandexSpeech } from '../../api/yandexSpeech.api.js'
 import { Markup } from 'telegraf'
 import * as dotenv from 'dotenv'
 
-dotenv.config({ path: `.env${process.env.NODE_ENV}` })
+dotenv.config({ path: '.env' })
 
 class SettingsKeyboard {
 	bottomNavigation = [Markup.button.callback('🛠 Меню настроек', 'Меню настроек'), Markup.button.callback('👈🏽 Назад', 'Назад')] // ◄ 🔙

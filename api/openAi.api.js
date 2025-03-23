@@ -3,7 +3,7 @@ import { createReadStream } from 'fs'
 import * as dotenv from 'dotenv'
 import {Logger} from "../utils/logger.utils.js";
 
-dotenv.config({ path: `.env${process.env.NODE_ENV}` })
+dotenv.config({ path: '.env' })
 const API_KEY = process.env.OPENAI_API_KEY
 
 class OpenAI {
@@ -35,11 +35,26 @@ class OpenAI {
 	// Translating .mp3 to text
 	async speechToText(filePath) {
 		try {
+			// TODO: Add english language only
 			const response = await this.openai.createTranscription(createReadStream(filePath), 'whisper-1')
 			return response.data.text
 		} catch (err) {
 			Logger.error('Speech to text', 'openAi.api', '', err.message, 'ERROR')
 		}
+	}
+
+	// TODO: Fix later
+	async textToSpeech(text) {
+		const response = await this.openai.audio.speech.create({
+			model: 'tts-1',
+			// voice: 'nova',
+			voice: 'onyx',
+			input: text,
+		});
+
+		console.debug('after');
+
+		return response;
 	}
 
 	async getPicture(message) {
