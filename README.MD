@@ -9,6 +9,17 @@
    <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
 </p>
 
+<div align="center">
+  <h2>What is changed in my fork</h2>
+</div>
+
+- Changed environment variables storage to `.env`
+- Updated `openai` package
+- Translation is turned off
+- The voice recognition is made to work only in english language
+- Added OpenAI TTS
+- Fixed some errors
+
 <div align="center"><h2>
 
 About: [^1]

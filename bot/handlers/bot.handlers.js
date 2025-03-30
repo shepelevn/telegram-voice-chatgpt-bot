@@ -133,12 +133,13 @@ class BotHandlers {
 			if (config.get('VOICE_RESPONSE') === 'true') {
 				const userSettings = telegramBot.userSettings
 				const text = JSON.stringify(gptResponse.content)
-				const translation = await googleTranslator.translate(text, {to: 'ru'})
+				// TODO: Add translation settings to env or telegram settings
+				// const translation = await googleTranslator.translate(text, {to: 'ru'})
 				if (config.get('TEXT_TO_SPEECH_MODE') === 'any') {
 					// Text to speech
 					const gptVoiceResponseYandexPath = await yandexSpeech.textToSpeech(userId, userSettings, text)
 					await ctx.replyWithAudio({source: gptVoiceResponseYandexPath})
-					response = await googleTranslator.textToSpeech(ctx.message.from.id, translation)
+					response = await googleTranslator.textToSpeech(ctx.message.from.id, text)
 					await ctx.replyWithAudio({source: response})
 					if (config.get('SAVE_VOICE_HISTORY') === 'request' || config.get('SAVE_VOICE_HISTORY') === 'false') {
 						await utils.deleteFile(gptVoiceResponseYandexPath)
@@ -157,7 +158,7 @@ class BotHandlers {
 				}
 				if (config.get('TEXT_TO_SPEECH_MODE') === 'google') {
 					// Text to speech
-					response = await googleTranslator.textToSpeech(ctx.message.from.id, translation)
+					response = await googleTranslator.textToSpeech(ctx.message.from.id, text)
 					await ctx.replyWithAudio({source: response})
 					if (config.get('SAVE_VOICE_HISTORY') === 'request' || config.get('SAVE_VOICE_HISTORY') === 'false') {
 						await utils.deleteFile(response)
@@ -165,7 +166,7 @@ class BotHandlers {
 					}
 				}
 				if (config.get('TEXT_TO_SPEECH_MODE') === 'openai') {
-					response = await openAi.textToSpeech(translation);
+					response = await openAi.textToSpeech(ctx.message.from.id, text);
 
 					await ctx.replyWithAudio({source: response})
 					if (config.get('SAVE_VOICE_HISTORY') === 'request' || config.get('SAVE_VOICE_HISTORY') === 'false') {

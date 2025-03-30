@@ -31,8 +31,11 @@ class Commands {
 	}
 
 	restart(telegramBot) {
-		telegramBot.bot.command('restart',async ctx => {
-			ctx.session = telegramBot.SESSION
+		telegramBot.bot.command('restart', async ctx => {
+			ctx.session = telegramBot.SESSION;
+
+			ctx.session.messages = [];
+
 			await ctx.reply('Контекст очищен. Отправте мне новый голосовой или текстовый запрос', {reply_markup: { remove_keyboard: true }})
 			const getUserSettings = utils.getSettings(ctx.message.from.id)
 			await telegramBot.setUserSettings(ctx.message.from.id)

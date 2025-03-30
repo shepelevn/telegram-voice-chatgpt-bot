@@ -1,9 +1,13 @@
-import { Configuration, OpenAIApi } from 'openai'
+import OpenAIAPI from 'openai';
 import { createReadStream } from 'fs'
 import * as dotenv from 'dotenv'
+import { resolve, dirname } from 'path'
+import { fileURLToPath } from 'url'
+import { writeFileSync } from 'fs'
 import {Logger} from "../utils/logger.utils.js";
 
 dotenv.config({ path: '.env' })
+const __dirname = dirname(fileURLToPath(import.meta.url))
 const API_KEY = process.env.OPENAI_API_KEY
 
 class OpenAI {
@@ -13,20 +17,20 @@ class OpenAI {
 		ASSISTANT: 'assistant'
 	}
 	constructor(apiKey) {
-		const configuration = new Configuration({
+		this.openai = new OpenAIAPI({
 			apiKey,
-		})
-		this.openai = new OpenAIApi(configuration)
+		});
 	}
 
 	// Getting ChatGPT response
 	async chat(messages) {
 		try {
-			const response = await this.openai.createChatCompletion({
-				model: 'gpt-3.5-turbo',
-				messages,
-			})
-			return response.data.choices[0].message
+			const response = await this.openai.chat.completions.create({
+				model: 'gpt-4o-mini',
+				messages: messages,
+			});
+
+			return response.choices[0].message;
 		} catch (err) {
 			Logger.error('Request to ChatGPT', 'openAi.api', '', err.message, 'ERROR')
 		}
@@ -35,26 +39,34 @@ class OpenAI {
 	// Translating .mp3 to text
 	async speechToText(filePath) {
 		try {
-			// TODO: Add english language only
-			const response = await this.openai.createTranscription(createReadStream(filePath), 'whisper-1')
-			return response.data.text
+			const response = await this.openai.audio.transcriptions.create({
+				file: createReadStream(filePath),
+				// model: 'whisper-1',
+				model: 'gpt-4o-transcribe',
+				// TODO: Make it a setting
+				language: 'en',
+			});
+
+			return response.text
 		} catch (err) {
 			Logger.error('Speech to text', 'openAi.api', '', err.message, 'ERROR')
 		}
 	}
 
-	// TODO: Fix later
-	async textToSpeech(text) {
+	async textToSpeech(userId, text) {
 		const response = await this.openai.audio.speech.create({
 			model: 'tts-1',
-			// voice: 'nova',
-			voice: 'onyx',
+			voice: 'nova',
 			input: text,
 		});
 
-		console.debug('after');
+		const timestamp = Date.now();
+		const filePath = resolve(__dirname, `../audio/response/${userId}`, `${userId}-${timestamp}.ogg`);
 
-		return response;
+		const buffer = Buffer.from(await response.arrayBuffer());
+
+		writeFileSync(filePath, buffer, {encoding:'base64'});
+		return filePath;
 	}
 
 	async getPicture(message) {

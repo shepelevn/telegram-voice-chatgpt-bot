@@ -3,10 +3,11 @@
 /.env
 /log/*
 !log/do_not_delete_this_directory
-/audio/*
+# /audio/*
+# !audio/request
+# !audio/response
+# !audio/request/do_not_delete_this_directory
+# !audio/response/do_not_delete_this_directory
 /audio/request/*
-!audio/request
-!audio/response
-!audio/request/do_not_delete_this_directory
-!audio/response/do_not_delete_this_directory
+/audio/response/*
 /node_modules/
