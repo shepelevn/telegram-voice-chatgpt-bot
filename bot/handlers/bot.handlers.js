@@ -40,9 +40,15 @@ class BotHandlers {
 
 					if (config.get('SPEECH_TO_TEXT_MODE') === 'openai') {
 						// Converting .ogg file to .mp3
-						const mp3Path = await oggToMp3Converter.convert(oggPath, userId)
+						// const mp3Path = await oggToMp3Converter.convert(oggPath, userId)
 						// Recognition .mp3 file to text
-						text = await openAi.speechToText(mp3Path)
+						const [whisperText, gpt4oText] = await Promise.all([
+							openAi.speechToText(oggPath, 'whisper-1'),
+							openAi.speechToText(oggPath, 'gpt-4o-transcribe'),
+						]);
+
+						text = await openAi.processTranscriptions(gpt4oText, whisperText, ctx.session.messages);
+
 						filePath = resolve(__dirname, `../../audio/request/${userId}`, `${userId}-${timestamp}.mp3`)
 						// Deleting .mp3 file
 						if (config.get('SAVE_VOICE_HISTORY') === 'response' || config.get('SAVE_VOICE_HISTORY') === 'false') {
@@ -69,7 +75,7 @@ class BotHandlers {
 					// const gptResponse = {content: 'текст'}
 					ctx.session.messages.push({role: openAi.roles.ASSISTANT, content: gptResponse.content})
 					// Sending ChatGPT response to user
-					await ctx.reply(gptResponse.content)
+					// await ctx.reply(gptResponse.content)
 					// Save statistics
 					utils.pushStatistics(ctx.message.from, text, gptResponse.content, 'voice')
 					// Voice response

@@ -2,7 +2,8 @@
 
 ## TODO
 
-* Add to README.md what is changed in this fork
+* Add initial system message
+* Change to gpt4o maybe
 
 ## Checks before commit
 
