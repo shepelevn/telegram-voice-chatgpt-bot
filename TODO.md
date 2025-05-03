@@ -2,8 +2,12 @@
 
 ## TODO
 
+* Add some files to `.gitignore`
+* Try to reduce the cost of TTS and text answers
 * Add initial system message
-* Change to gpt4o maybe
+* Make text and the voice more emotional
+* Add the info on how much tokens is spent on the message
+* Add the additional message of the grammatical and other mistakes in the text.
 
 ## Checks before commit
 
