@@ -13,12 +13,7 @@
   <h2>What is changed in my fork</h2>
 </div>
 
-- Changed environment variables storage to `.env`
-- Updated `openai` package
-- Translation is turned off
-- The voice recognition is made to work only in english language
-- Added OpenAI TTS
-- Fixed some errors
+- I made the bot more optimized for practicing English through audio.
 
 <div align="center"><h2>
 

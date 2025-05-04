@@ -1,7 +1,6 @@
 # Voice ChatGPT telegram bot
 
 ## TODO
-* Remove "What was changed in my fork section" from `README.md`
 * Try to reduce the cost of TTS and text answers
 
 * Add initial system message
