@@ -38,6 +38,17 @@ class BotHandlers {
 					let text = ''
 					let filePath
 
+					if (ctx.session.messages.length === 0) {
+						const practiceLanguage = process.env.PRACTICE_LANGUAGE ?? "English";
+						const systemMessage = `
+							You are the chatbot helping the user practice ${practiceLanguage}.
+							You and the user are talking to each other through audio.
+							Keep your messages short. Give the user an opportunity to talk.
+						`;
+
+						ctx.session.messages.push({role: openAi.roles.SYSTEM, content: systemMessage});
+					}
+
 					if (config.get('SPEECH_TO_TEXT_MODE') === 'openai') {
 						// Converting .ogg file to .mp3
 						// const mp3Path = await oggToMp3Converter.convert(oggPath, userId)
@@ -101,6 +112,16 @@ class BotHandlers {
 				if (!ctx.session) ctx.session = telegramBot.SESSION
 
 				if (JSON.stringify(telegramBot.whitelist).includes(ctx.message.from.username)) {
+					if (ctx.session.messages.length === 0) {
+						const practiceLanguage = process.env.PRACTICE_LANGUAGE ?? "English";
+						const systemMessage = `
+							You are the chatbot helping the user practice ${practiceLanguage}.
+							Keep your messages short. Give the user an opportunity to talk.
+						`;
+
+						ctx.session.messages.push({role: openAi.roles.SYSTEM, content: systemMessage})
+					}
+
 					// Getting the userID
 					const userId = String(ctx.message.from.id)
 					// // Set user settings

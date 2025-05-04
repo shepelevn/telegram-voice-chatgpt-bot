@@ -75,37 +75,67 @@ class OpenAI {
 
 	async processTranscriptions(gpt4oText, whisperText, messages) {
 		const lastMessages = messages.slice(-10);
+		let contextMessagesString = '';
 
-		const processPrompt = `
-			There are two transcriptions of the audio message.
-			The first one is done by 'whisper-1' and is less reliable.
-			The second is done by 'gpt-4o-transcribe', but the text can be truncated.
+		for (const message of lastMessages) {
+			if (message.role === this.roles.USER) {
+				contextMessagesString += `
+"
+${message.content}
+"
+				`;
+			}
+		}
 
-			Also because of transcription it's possible that some words are misinterpreted.
-			For that you have 10 previous messages for the context, so you can fix the transcription.
+		let processPrompt = `
+There are two transcriptions of the audio message.
+The first one is done by 'whisper-1' and is less reliable.
+The second is done by 'gpt-4o-transcribe', but the text can be truncated.
 
-			Based on previous messages context and these two texts write the most accurate transcription
-			of the text. Do not write anything else. Do not write your own words. I need just the combined
-			transcription text. Fix the possible transcription mistakes.
+Also because of transcription it's possible that some words are misinterpreted.
+For that you have 10 previous messages for the context, so you can fix the transcription.
 
-			Here is the transcription done by 'whisper-1'. It's unreliable, but doesn't have a chance
-			to be truncated:
+Based on previous messages context and these two texts write the most accurate transcription
+of the text. Do not write anything else. Do not write your own words. I need just the combined
+transcription text. Fix the possible transcription mistakes.
 
-			"
-			${whisperText}
-			"
+Here is the transcription done by 'whisper-1'. It's unreliable, but doesn't have a chance
+to be truncated:
 
-			Here is the transcription done by 'gpt-4o-transcribe'. It's possible that it isn't the
-			complete transcription:
+"
+${whisperText}
+"
 
-			"
-			${gpt4oText}
-			"
+Here is the transcription done by 'gpt-4o-transcribe'. It's possible that it isn't the
+complete transcription:
+
+"
+${gpt4oText}
+"
 		`;
 
-		lastMessages.push({role: this.roles.USER, content: processPrompt})
+		let messagesString;
 
-		const response = await this.chat(lastMessages, 'gpt-4o');
+		if (contextMessagesString !== '') {
+			messagesString = `
+
+Here are the context messages:
+
+${contextMessagesString}
+			`;
+		} else {
+			messagesString = `
+
+There are no context messages.
+			`;
+		}
+
+		processPrompt += messagesString;
+
+		const transcriptionMessageArray = [];
+		transcriptionMessageArray.push({role: this.roles.USER, content: processPrompt})
+
+		const response = await this.chat(transcriptionMessageArray, 'gpt-4o');
 		return response.content;
 	}
 
