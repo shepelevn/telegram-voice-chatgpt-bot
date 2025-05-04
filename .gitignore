@@ -11,3 +11,4 @@
 /audio/request/*
 /audio/response/*
 /node_modules/
+/data/*

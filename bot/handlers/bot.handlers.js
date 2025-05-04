@@ -20,7 +20,7 @@ class BotHandlers {
 			try {
 				if (!ctx.session) ctx.session = telegramBot.SESSION
 
-				if (JSON.stringify(telegramBot.whitelist.users).includes(ctx.message.from.username)) {
+				if (JSON.stringify(telegramBot.whitelist).includes(ctx.message.from.username)) {
 					// Getting the userID
 					const userId = String(ctx.message.from.id)
 					// // Set user settings
@@ -100,7 +100,7 @@ class BotHandlers {
 			try {
 				if (!ctx.session) ctx.session = telegramBot.SESSION
 
-				if (JSON.stringify(telegramBot.whitelist.users).includes(ctx.message.from.username)) {
+				if (JSON.stringify(telegramBot.whitelist).includes(ctx.message.from.username)) {
 					// Getting the userID
 					const userId = String(ctx.message.from.id)
 					// // Set user settings

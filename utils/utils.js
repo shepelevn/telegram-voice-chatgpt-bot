@@ -8,6 +8,26 @@ import fs from 'fs'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 class Utils {
+	checkDataFiles() {
+		this.checkDataFile('history.data.json');
+		this.checkDataFile('settings.data.json');
+		this.checkDataFile('statistics.data.json');
+	}
+
+	checkDataFile(filename) {
+		const path = resolve(__dirname, '../data', filename);
+		if (!fs.existsSync(path)) {
+			console.log(`The file ${filename} was not found. Creating the new one.`);
+			fs.writeFile(path, '[]', err => {
+			  if (err) {
+			    console.error(err);
+			  } else {
+			    // file written successfully
+			  }
+			});
+		}
+	}
+
 	// Deleting file
 	async deleteFile(path) {
 		try {

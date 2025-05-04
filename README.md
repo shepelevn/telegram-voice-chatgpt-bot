@@ -56,8 +56,8 @@ Installation: [^3]
 $ git clone https://github.com/Hashmann/telegram-voice-chatgpt-bot.git
 $ cd server
 ```
-- Edit `.env.production` `.env.development` and set your telegram bot token and OpenAI key.
-- Edit `whitelist.user.json` and add the usernames to the whitelist.
+- Copy `.env.production` or `.env.development` contents to the `.env` file and set your telegram bot token and OpenAI key inside the `.env` file.
+- Add the usernames to the whitelist inside the `.env` file.
 ```
 $ npm install
 ```

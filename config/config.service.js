@@ -72,10 +72,8 @@ class Config{
 
 	async checkingWhitelist() {
 		try {
-			const whitelist = await fsPromises.readFile(resolve(__dirname, '../config', 'whitelist.config.json'), 'utf8')
-				.then(data => JSON.parse(data))
-				.catch(err => Logger.error('Getting my statistics', 'utils', '', err.message, 'ERROR') )
-			if (whitelist.users.length <= 0) throw new Error('Whitelist cannot be empty')
+			const whitelist = JSON.parse(process.env.WHITELIST);
+			if (whitelist.length <= 0) throw new Error('Whitelist cannot be empty')
 			Logger.info('Checking whitelist', 'config.service', '', 'CHECKED', 'v')
 			return true
 		} catch (err) {

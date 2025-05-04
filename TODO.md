@@ -1,9 +1,9 @@
 # Voice ChatGPT telegram bot
 
 ## TODO
-
-* Add some files to `.gitignore`
+* Remove "What was changed in my fork section" from `README.md`
 * Try to reduce the cost of TTS and text answers
+
 * Add initial system message
 * Make text and the voice more emotional
 * Add the info on how much tokens is spent on the message

@@ -33,9 +33,7 @@ class Bot {
 		messages: []
 	}
 	// Getting users whitelist
-	whitelist = fsPromises.readFile(resolve(__dirname, '../config', 'whitelist.config.json'), 'utf8')
-		.then(data => { this.whitelist = JSON.parse(data) })
-		.catch(err => { console.log('Read whitelist.config.json ERROR:' + err) })
+	whitelist = JSON.parse(process.env.WHITELIST);
 
 	// Start bot
 	launch() {
