@@ -29,7 +29,9 @@ class GoogleTranslate {
 	async textToSpeech(userId, input) {
 		const timestamp = Date.now()
 		const filePath = resolve(__dirname, `../audio/response/${userId}`, `${userId}-${timestamp}.ogg`)
-		const res = await speak(input.text, {to: input.to})
+
+		const res = await speak(input, {to: process.env.GOOGLE_TTS_TO})
+
 		writeFileSync(filePath, res, {encoding:'base64'})
 		return filePath
 	}
