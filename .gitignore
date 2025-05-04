@@ -12,3 +12,4 @@
 /audio/response/*
 /node_modules/
 /data/*
+!/data/.gitkeep
