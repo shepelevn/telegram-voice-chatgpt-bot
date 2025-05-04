@@ -23,7 +23,11 @@ class OpenAI {
 	}
 
 	// Getting ChatGPT response
-	async chat(messages, model = 'gpt-4o') {
+	async chat(messages, model = null) {
+		if (!model) {
+			model = process.env.OPENAI_DEFAULT_MODEL;
+		}
+
 		try {
 			const response = await this.openai.chat.completions.create({
 				model: model,
