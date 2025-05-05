@@ -43,7 +43,7 @@ class BotHandlers {
 						const systemMessage = `
 							You are the chatbot helping the user practice ${practiceLanguage}.
 							You and the user are talking to each other through audio.
-							Keep your messages short. Give the user an opportunity to talk.
+							Refrain from writing messages that are too long.
 						`;
 
 						ctx.session.messages.push({role: openAi.roles.SYSTEM, content: systemMessage});
@@ -116,7 +116,7 @@ class BotHandlers {
 						const practiceLanguage = process.env.PRACTICE_LANGUAGE ?? "English";
 						const systemMessage = `
 							You are the chatbot helping the user practice ${practiceLanguage}.
-							Keep your messages short. Give the user an opportunity to talk.
+							Refrain from writing messages that are too long.
 						`;
 
 						ctx.session.messages.push({role: openAi.roles.SYSTEM, content: systemMessage})
