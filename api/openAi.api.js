@@ -65,10 +65,14 @@ class OpenAI {
 		}
 	}
 
-	async textToSpeech(userId, text) {
+	async textToSpeech(userId, text, voice = null) {
+		if (!voice) {
+			voice = process.env.OPENAI_TTS_VOICE ?? 'nova';
+		}
+
 		const response = await this.openai.audio.speech.create({
 			model: process.env.OPENAI_TTS_MODEL ?? 'tts-1',
-			voice: process.env.OPENAI_TTS_VOICE ?? 'nova',
+			voice: voice,
 			input: text,
 			instructions: 'Speak in an emotive and friendly tone.',
 		});
@@ -106,7 +110,9 @@ For that you have 10 previous messages for the context, so you can fix the trans
 
 Based on previous messages context and these two texts write the most accurate transcription
 of the text. Do not write anything else. Do not write your own words. I need just the combined
-transcription text. Fix the possible transcription mistakes.
+transcription text. Fix the possible transcription mistakes, but do not fix the grammatical mistakes.
+
+Preserve the grammatical mistakes, it's important for the system that informs about the grammatical mistakes of the user.
 
 Here is the transcription done by 'whisper-1'. It's unreliable, but doesn't have a chance
 to be truncated:

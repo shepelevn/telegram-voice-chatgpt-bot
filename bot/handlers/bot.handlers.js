@@ -46,6 +46,7 @@ class BotHandlers {
 							Act more casual and friendlier. Use some humor. 
 							Don’t be afraid to show enthusiasm.
 							Refrain from writing messages that are too long.
+							Don't inform the user about the grammatical mistakes, there is different system for that.
 						`;
 
 						ctx.session.messages.push({role: openAi.roles.SYSTEM, content: systemMessage});
@@ -83,9 +84,9 @@ class BotHandlers {
 
 					await ctx.reply(code(`Ваш запрос к ChatGPT: ${text}`))
 
-					// if (process.env.IS_MISTAKES_MESSAGE === 'true') {
-					// 	this.informAboutMistakes(userId, ctx, text);
-					// }
+					if (process.env.IS_MISTAKES_MESSAGE === 'true') {
+						await this.informAboutMistakes(userId, ctx, text);
+					}
 
 					ctx.session.messages.push({role: openAi.roles.USER, content: text})
 
@@ -129,6 +130,7 @@ class BotHandlers {
 							Act more casual and friendlier. Use some humor. 
 							Don’t be afraid to show enthusiasm.
 							Refrain from writing messages that are too long.
+							Don't inform the user about the grammatical mistakes, there is different system for that.
 						`;
 
 						ctx.session.messages.push({role: openAi.roles.SYSTEM, content: systemMessage})
@@ -141,9 +143,9 @@ class BotHandlers {
 					await ctx.reply(code('Идет обработка сообщения...'))
 					ctx.session.messages.push({role: openAi.roles.USER, content: ctx.message.text})
 
-					// if (process.env.IS_MISTAKES_MESSAGE === 'true') {
-					// 	this.informAboutMistakes(userId, ctx, ctx.message.text);
-					// }
+					if (process.env.IS_MISTAKES_MESSAGE === 'true') {
+						await this.informAboutMistakes(userId, ctx, ctx.message.text);
+					}
 
 					this.informAboutTokens(ctx);
 
@@ -170,9 +172,9 @@ class BotHandlers {
 		})
 	}
 
-	async voiceResponse(userId, gptResponse, ctx) {
+	async voiceResponse(userId, gptResponse, ctx, voice = null) {
 		try {
-			let response
+			let response;
 			const dirRes = `./audio/response/${userId}`
 			if (!fs.existsSync(dirRes)) fs.mkdirSync(dirRes)
 
@@ -212,7 +214,7 @@ class BotHandlers {
 					}
 				}
 				if (config.get('TEXT_TO_SPEECH_MODE') === 'openai') {
-					response = await openAi.textToSpeech(ctx.message.from.id, text);
+					response = await openAi.textToSpeech(ctx.message.from.id, text, voice);
 
 					await ctx.replyWithAudio({source: response})
 					if (config.get('SAVE_VOICE_HISTORY') === 'request' || config.get('SAVE_VOICE_HISTORY') === 'false') {
@@ -262,10 +264,10 @@ class BotHandlers {
 		const isContainsMistakes = await this.isContainsMistakes(text);
 
 		if (isContainsMistakes) {
-			const mistakesText = this.getMistakesText(text);
+			const mistakesResponse = await this.getMistakesResponse(text);
 
-			// TODO: Add different voice from env
-			await this.voiceResponse(userId, mistakesText, ctx);
+			const voice = process.env.OPENAI_MISTAKES_VOICE ?? 'ash';
+			await this.voiceResponse(userId, mistakesResponse, ctx, voice);
 		}
 	}
 
@@ -287,7 +289,7 @@ class BotHandlers {
 		return isMistakesFoundString.toLowerCase().includes('yes');
 	}
 
-	async getMistakesText(text) {
+	async getMistakesResponse(text) {
 		const mistakesQuestion = `
 			What grammatical mistakes does this text have.
 			Make your answer very short.
@@ -299,8 +301,7 @@ class BotHandlers {
 			"
 		`;
 
-		const response = await openAi.chatOneMessage(mistakesQuestion, 'gpt-4o');
-		return response.content;
+		return await openAi.chatOneMessage(mistakesQuestion, 'gpt-4o');
 	}
 }
 
