@@ -67,9 +67,10 @@ class OpenAI {
 
 	async textToSpeech(userId, text) {
 		const response = await this.openai.audio.speech.create({
-			model: 'tts-1',
+			model: process.env.OPENAI_TTS_MODEL ?? 'tts-1',
 			voice: process.env.OPENAI_TTS_VOICE ?? 'nova',
 			input: text,
+			instructions: 'Speak in an emotive and friendly tone.',
 		});
 
 		const timestamp = Date.now();
