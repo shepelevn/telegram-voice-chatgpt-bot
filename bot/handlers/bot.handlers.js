@@ -82,6 +82,11 @@ class BotHandlers {
 					}
 
 					await ctx.reply(code(`Ваш запрос к ChatGPT: ${text}`))
+
+					// if (process.env.IS_MISTAKES_MESSAGE === 'true') {
+					// 	this.informAboutMistakes(userId, ctx, text);
+					// }
+
 					ctx.session.messages.push({role: openAi.roles.USER, content: text})
 
 					this.informAboutTokens(ctx);
@@ -135,6 +140,10 @@ class BotHandlers {
 					// await telegramBot.setUserSettings(userId)
 					await ctx.reply(code('Идет обработка сообщения...'))
 					ctx.session.messages.push({role: openAi.roles.USER, content: ctx.message.text})
+
+					// if (process.env.IS_MISTAKES_MESSAGE === 'true') {
+					// 	this.informAboutMistakes(userId, ctx, ctx.message.text);
+					// }
 
 					this.informAboutTokens(ctx);
 
@@ -247,6 +256,51 @@ class BotHandlers {
 		const tokensSpentFormatted = nf.format(tokensSpent);
 		const totalTokensFormatted = nf.format(ctx.session.totalTokensSpent);
 		ctx.reply(`Tokens: ${tokensSpentFormatted}. Total: ${totalTokensFormatted}`);
+	}
+
+	async informAboutMistakes(userId, ctx, text) {
+		const isContainsMistakes = await this.isContainsMistakes(text);
+
+		if (isContainsMistakes) {
+			const mistakesText = this.getMistakesText(text);
+
+			// TODO: Add different voice from env
+			await this.voiceResponse(userId, mistakesText, ctx);
+		}
+	}
+
+	async isContainsMistakes(text) {
+		const mistakesQuestionPrompt = `
+			Does this text contain any serious grammatical mistakes?
+			Answer "Yes" or "No" and nothing else.
+
+			Here is the text to check:
+
+			"
+			${text}
+			"
+		`;
+
+		const isMistakesFoundResponse = await openAi.chatOneMessage(mistakesQuestionPrompt, 'gpt-4o');
+		const isMistakesFoundString = isMistakesFoundResponse.content;
+
+		return isMistakesFoundString.toLowerCase().includes('yes');
+	}
+
+	async getMistakesText(text) {
+		const mistakesQuestion = `
+			What grammatical mistakes does this text have.
+			Make your answer very short.
+
+			Here is the text:
+
+			"
+			${text}
+			"
+		`;
+
+		const response = await openAi.chatOneMessage(mistakesQuestion, 'gpt-4o');
+		return response.content;
 	}
 }
 

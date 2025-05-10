@@ -40,6 +40,14 @@ class OpenAI {
 		}
 	}
 
+	async chatOneMessage(text, model = null) {
+		const oneMessageArray = [];
+
+		oneMessageArray.push({role: openAi.roles.USER, content: text});
+
+		return await this.chat(oneMessageArray, model);
+	}
+
 	// Translating .mp3 to text
 	async speechToText(filePath, model) {
 		try {
