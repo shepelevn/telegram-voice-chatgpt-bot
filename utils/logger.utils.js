@@ -95,7 +95,7 @@ export class Logger {
     } else return console.error('Please use "one_file", "different_files" or "together"')
   }
 
-  static error(message, file, ip, err, status) {
+  static error(message, file, ip, err, status, exception) {
     const errorBadge = `[ ◀◀◀ ERROR ▶▶▶ ]`
     const badge = `[ ✘ ]`
     const badgeLog = `\x1b[31m[ ✘ ]`
@@ -139,6 +139,8 @@ export class Logger {
       this.saveLog(`${process.env.LOG_PATH}/${process.env.LOG_FILENAME}`, saveMessage)
       this.saveLog(`${process.env.LOG_PATH}/${process.env.LOG_FILENAME_ERROR}`, saveMessage)
     } else return console.error('Please use "one_file", "different_files" or "together"')
+
+    console.error(exception.stack);
   }
 
   static saveLog(filePath, message) {

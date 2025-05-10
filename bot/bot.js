@@ -52,15 +52,22 @@ class Bot {
 
 	async setUserSettings(userId) {
 		try {
-			const userSettings = await utils.getSettings(userId)
+			let userSettings = await utils.getSettings(userId)
 			console.log(userSettings)
+
+			if (!userSettings) {
+				userSettings = {
+					'settings': {},
+				};
+			}
+
 			const settings = userSettings.settings
 			for (let settingsKey in settings) {
 				if (settings[settingsKey] !== this.userSettings.get(settingsKey)) this.userSettings.set(settingsKey, settings[settingsKey])
 			}
 			Logger.info('User Configuration Setting', 'bot', '', 'DONE', 'v')
 		} catch (err) {
-			Logger.error('User Configuration Setting', 'bot', '', err.message, 'ERROR')
+			Logger.error('User Configuration Setting', 'bot', '', err.message, 'ERROR', err)
 		}
 	}
 }

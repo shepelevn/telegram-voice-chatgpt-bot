@@ -36,7 +36,7 @@ class OpenAI {
 
 			return response.choices[0].message;
 		} catch (err) {
-			Logger.error('Request to ChatGPT', 'openAi.api', '', err.message, 'ERROR')
+			Logger.error('Request to ChatGPT', 'openAi.api', '', err.message, 'ERROR', err);
 		}
 	}
 
@@ -53,14 +53,14 @@ class OpenAI {
 
 			return response.text
 		} catch (err) {
-			Logger.error('Speech to text', 'openAi.api', '', err.message, 'ERROR')
+			Logger.error('Speech to text', 'openAi.api', '', err.message, 'ERROR', err);
 		}
 	}
 
 	async textToSpeech(userId, text) {
 		const response = await this.openai.audio.speech.create({
 			model: 'tts-1',
-			voice: 'nova',
+			voice: process.env.OPENAI_TTS_VOICE ?? 'nova',
 			input: text,
 		});
 

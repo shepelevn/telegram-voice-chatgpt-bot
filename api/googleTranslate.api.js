@@ -21,7 +21,7 @@ class GoogleTranslate {
 			return {text: res.text, from: res.from.language.iso, to: params.to}
 			//=> nl
 		}).catch(err => {
-			Logger.error('GoogleTranslate', 'googleTranslate.api', '', err.message, 'ERROR')
+			Logger.error('GoogleTranslate', 'googleTranslate.api', '', err.message, 'ERROR', err);
 		})
 	}
 

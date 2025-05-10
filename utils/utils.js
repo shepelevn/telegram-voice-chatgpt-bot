@@ -33,7 +33,7 @@ class Utils {
 		try {
 			await fsPromises.unlink(path)
 		} catch (err) {
-			Logger.error('Deleting file', 'utils', '', err.message, 'ERROR')
+			Logger.error('Deleting file', 'utils', '', err.message, 'ERROR', err);
 		}
 	}
 	// Deleting directory
@@ -41,7 +41,7 @@ class Utils {
 		try {
 			if (!fs.readdirSync(path)) await fs.rmdirSync(path)
 		} catch (err) {
-			Logger.error('Deleting directory', 'utils', '', err.message, 'ERROR')
+			Logger.error('Deleting directory', 'utils', '', err.message, 'ERROR', err);
 		}
 	}
 
@@ -72,7 +72,7 @@ class Utils {
 					statistics.push(statisticsData)
 					fsPromises.writeFile(resolve(__dirname, '../data', 'statistics.data.json'), JSON.stringify(statistics))
 						.then(() => { Logger.info('Creating a new record', 'utils', '', 'DONE', 'v') })
-						.catch(err => { Logger.error('Creating a new record', 'utils', '', err.message, 'FAILED') })
+						.catch(err => { Logger.error('Creating a new record', 'utils', '', err.message, 'FAILED', err); })
 				} else {
 					user.numberOfWord = user.numberOfWord + request.split(' ').length
 					user.numberOfRequest = user.numberOfRequest + 1
@@ -81,10 +81,10 @@ class Utils {
 					if (response.length !== 0) user.valueCharacterOfResponse = user.valueCharacterOfResponse + response.length
 					fsPromises.writeFile(resolve(__dirname, '../data', 'statistics.data.json'), JSON.stringify(statistics))
 						.then(() => { Logger.info('Update statistics.data.json', 'utils', '', 'DONE', 'v') })
-						.catch(err => { Logger.error('Update statistics.data.json', 'utils', '', err.message, 'FAILED') })
+						.catch(err => { Logger.error('Update statistics.data.json', 'utils', '', err.message, 'FAILED', err); })
 				}
 			})
-			.catch(err => { Logger.error('Read statistics.data.json', 'utils', '', err.message, 'ERROR') })
+			.catch(err => { Logger.error('Read statistics.data.json', 'utils', '', err.message, 'ERROR', err); })
 	}
 
 	// Getting statistics
@@ -95,7 +95,7 @@ class Utils {
 				return statistics.find(user => user.id === userId)
 			})
 			.catch(err => {
-				Logger.error('Getting my statistics', 'utils', '', err.message, 'ERROR')
+				Logger.error('Getting my statistics', 'utils', '', err.message, 'ERROR', err);
 			})
 	}
 
@@ -128,7 +128,7 @@ class Utils {
 				await fsPromises.writeFile(resolve(__dirname, '../data', 'history.data.json'), JSON.stringify(data))
 			}
 		} catch (err) {
-			Logger.error('Push history', 'utils', '', err.message, 'ERROR')
+			Logger.error('Push history', 'utils', '', err.message, 'ERROR', err);
 		}
 	}
 
@@ -150,17 +150,17 @@ class Utils {
 					settingsFile.push(settingsData)
 					fsPromises.writeFile(resolve(__dirname, '../data', 'settings.data.json'), JSON.stringify(settingsFile))
 						.then(() => { Logger.info('Creating a new settings for user', 'utils', '', 'DONE', 'v') })
-						.catch(err => { Logger.error('Creating a new settings for user', 'utils', '', err.message, 'FAILED') })
+						.catch(err => { Logger.error('Creating a new settings for user', 'utils', '', err.message, 'FAILED', err); })
 				} else {
 					for (let key in telegramBot.settings) {
 						if (settings.get(key) !== userSettings.settings[key]) userSettings.settings[key] = settings.get(key)
 					}
 					fsPromises.writeFile(resolve(__dirname, '../data', 'settings.data.json'), JSON.stringify(settingsFile))
 						.then(() => { Logger.info('Updating settings.data.json', 'utils', '', 'DONE', 'v') })
-						.catch(err => { Logger.error('Updating settings.data.json', 'utils', '', err.message, 'FAILED') })
+						.catch(err => { Logger.error('Updating settings.data.json', 'utils', '', err.message, 'FAILED', err); })
 				}
 			})
-			.catch(err => { Logger.error('Reading settings.data.json', 'utils', '', err.message, 'ERROR') })
+			.catch(err => { Logger.error('Reading settings.data.json', 'utils', '', err.message, 'ERROR', err); })
 	}
 
 	async getSettings(userId) {
@@ -170,11 +170,11 @@ class Utils {
 					let settings = JSON.parse(data)
 					return settings.find(user => user.id === +userId)
 				})
-				.catch(err => Logger.error('Reading settings.data.json', 'utils', '', err.message, 'ERROR'))
+				.catch(err => Logger.error('Reading settings.data.json', 'utils', '', err.message, 'ERROR', err))
 			Logger.info('Getting settings for user', 'utils', `id: ${userId}`, 'DONE', 'v')
 			return settings
 		} catch (err) {
-			Logger.error('Getting settings for user', 'utils', `id: ${userId}`, err.message, 'ERROR')
+			Logger.error('Getting settings for user', 'utils', `id: ${userId}`, err.message, 'ERROR', err);
 		}
 	}
 }

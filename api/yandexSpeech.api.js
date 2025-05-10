@@ -228,7 +228,7 @@ class YandexSpeech {
 			const responseYandex = await axios(axiosConfig)
 			return responseYandex.data.result
 		} catch (err) {
-			Logger.error('YandexSpeech', 'yandexSpeech.api', '', err.message, 'ERROR')
+			Logger.error('YandexSpeech', 'yandexSpeech.api', '', err.message, 'ERROR', err);
 		}
 	}
 
@@ -267,7 +267,7 @@ class YandexSpeech {
 				stream.on('finish', () => resolve(filePath))
 			})
 		} catch (err) {
-			Logger.error('textToSpeech', 'yandexSpeech.api', '', err.message, 'ERROR')
+			Logger.error('textToSpeech', 'yandexSpeech.api', '', err.message, 'ERROR', err);
 		}
 	}
 
@@ -476,7 +476,7 @@ class YandexSpeech {
 			}
 			Logger.info('Set User Config', 'yandexSpeech.api', '', 'DONE', 'v')
 		} catch (err) {
-			Logger.error('Set User Config', 'yandexSpeech.api', '', err.message, 'ERROR')
+			Logger.error('Set User Config', 'yandexSpeech.api', '', err.message, 'ERROR', err);
 		}
 	}
 }

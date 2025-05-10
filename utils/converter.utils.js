@@ -28,7 +28,7 @@ class OggToMp3Converter {
 					.run()
 			})
 		} catch (err) {
-			Logger.error('Converting file', 'converter.utils', '', err.message, 'ERROR')
+			Logger.error('Converting file', 'converter.utils', '', err.message, 'ERROR', err);
 		}
 	}
 
@@ -43,7 +43,7 @@ class OggToMp3Converter {
 				stream.on('finish', () => resolve(filePath))
 			})
 		} catch (err) {
-			Logger.error('Creating file', 'converter.utils', '', err.message, 'ERROR')
+			Logger.error('Creating file', 'converter.utils', '', err.message, 'ERROR', err);
 		}
 	}
 }

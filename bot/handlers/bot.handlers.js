@@ -43,6 +43,8 @@ class BotHandlers {
 						const systemMessage = `
 							You are the chatbot helping the user practice ${practiceLanguage}.
 							You and the user are talking to each other through audio.
+							Act more casual and friendlier. Use some humor. 
+							Don’t be afraid to show enthusiasm.
 							Refrain from writing messages that are too long.
 						`;
 
@@ -101,7 +103,7 @@ class BotHandlers {
 					Logger.info(`User: ${ctx.message.from.first_name} id: ${ctx.message.from.id}`, 'bot.handlers', '', 'NO ACCESS', 'x')
 				}
 			} catch (err) {
-				Logger.error('Voice processing', 'bot.handlers', '', err.message, 'ERROR')
+				Logger.error('Voice processing', 'bot.handlers', '', err.message, 'ERROR', err);
 			}
 		})
 	}
@@ -116,6 +118,8 @@ class BotHandlers {
 						const practiceLanguage = process.env.PRACTICE_LANGUAGE ?? "English";
 						const systemMessage = `
 							You are the chatbot helping the user practice ${practiceLanguage}.
+							Act more casual and friendlier. Use some humor. 
+							Don’t be afraid to show enthusiasm.
 							Refrain from writing messages that are too long.
 						`;
 
@@ -146,7 +150,7 @@ class BotHandlers {
 					Logger.info(`User: ${ctx.message.from.first_name} id: ${ctx.message.from.id}`, 'bot.handlers', '', 'NO ACCESS', 'x')
 				}
 			} catch (err) {
-				Logger.error('Text processing', 'bot.handlers', '', err.message, 'ERROR')
+				Logger.error('Text processing', 'bot.handlers', '', err.message, 'ERROR', err);
 			}
 		})
 	}
@@ -204,7 +208,7 @@ class BotHandlers {
 			}
 			return response
 		} catch (err) {
-			Logger.error('Voice Response processing', 'bot.handlers', '', err.message, 'ERROR')
+			Logger.error('Voice Response processing', 'bot.handlers', '', err.message, 'ERROR', err);
 		}
 	}
 
@@ -222,7 +226,7 @@ class BotHandlers {
 				await utils.pushHistory(from, userData, assistantData)
 			}
 		} catch (err) {
-			Logger.error('Save history', 'bot.handlers', '', err.message, 'ERROR')
+			Logger.error('Save history', 'bot.handlers', '', err.message, 'ERROR', err);
 		}
 	}
 }

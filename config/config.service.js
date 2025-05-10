@@ -66,7 +66,7 @@ class Config{
 			Logger.info(`Settings: values are valid`, 'config.service', '', 'CHECKED', 'v')
 			return true
 		} catch (err) {
-			Logger.error('Config checking settings:', 'config.service', '', err.message, 'ERROR')
+			Logger.error('Config checking settings:', 'config.service', '', err.message, 'ERROR', err);
 		}
 	}
 
@@ -77,7 +77,7 @@ class Config{
 			Logger.info('Checking whitelist', 'config.service', '', 'CHECKED', 'v')
 			return true
 		} catch (err) {
-			Logger.error('Checking whitelist', 'config.service', '' , err.message, 'ERROR')
+			Logger.error('Checking whitelist', 'config.service', '' , err.message, 'ERROR', err);
 		}
 	}
 
@@ -113,7 +113,7 @@ class Config{
 			Logger.info(`Logger: values are valid`, 'config.service', '', 'CHECKED', 'v')
 			return true
 		} catch (err) {
-			Logger.error('Checking logger config', 'config.service', '' , err.message, 'ERROR')
+			Logger.error('Checking logger config', 'config.service', '' , err.message, 'ERROR', err);
 		}
 	}
 
@@ -163,7 +163,7 @@ class Config{
 			if ( isFieldError === true ) throw new Error(`Getting fields[ '${key}' ${isFieldError} ] invalid`)
 			return result
 		} catch (err) {
-			Logger.error('Getting config:', 'config.service', '', err.message, 'ERROR')
+			Logger.error('Getting config:', 'config.service', '', err.message, 'ERROR', err);
 		}
 	}
 }
