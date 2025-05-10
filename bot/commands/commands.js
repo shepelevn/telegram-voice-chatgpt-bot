@@ -35,6 +35,7 @@ class Commands {
 			ctx.session = telegramBot.SESSION;
 
 			ctx.session.messages = [];
+			ctx.session.totalTokensSpent = 0;
 
 			await ctx.reply('Контекст очищен. Отправте мне новый голосовой или текстовый запрос', {reply_markup: { remove_keyboard: true }})
 			const getUserSettings = utils.getSettings(ctx.message.from.id)

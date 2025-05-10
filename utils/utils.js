@@ -177,6 +177,16 @@ class Utils {
 			Logger.error('Getting settings for user', 'utils', `id: ${userId}`, err.message, 'ERROR', err);
 		}
 	}
+
+	approximateTokens(messages) {
+		let totalText = '';
+
+		for (const message of messages) {
+			totalText += message.content;
+		}
+
+		return Math.ceil(totalText.length / 4);
+	}
 }
 
 export const utils = new Utils()

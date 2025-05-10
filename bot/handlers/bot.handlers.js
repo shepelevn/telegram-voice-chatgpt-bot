@@ -81,8 +81,11 @@ class BotHandlers {
 						}
 					}
 
-					await ctx.reply(code(`Ваше запрос к ChatGPT: ${text}`))
+					await ctx.reply(code(`Ваш запрос к ChatGPT: ${text}`))
 					ctx.session.messages.push({role: openAi.roles.USER, content: text})
+
+					this.informAboutTokens(ctx);
+
 					// Getting ChatGPT response
 					const gptResponse = await openAi.chat(ctx.session.messages)
 					// const gptResponse = {content: 'текст'}
@@ -132,6 +135,9 @@ class BotHandlers {
 					// await telegramBot.setUserSettings(userId)
 					await ctx.reply(code('Идет обработка сообщения...'))
 					ctx.session.messages.push({role: openAi.roles.USER, content: ctx.message.text})
+
+					this.informAboutTokens(ctx);
+
 					// Getting ChatGPT response
 					const gptResponse = await openAi.chat(ctx.session.messages)
 					ctx.session.messages.push({role: openAi.roles.ASSISTANT, content: gptResponse.content})
@@ -228,6 +234,19 @@ class BotHandlers {
 		} catch (err) {
 			Logger.error('Save history', 'bot.handlers', '', err.message, 'ERROR', err);
 		}
+	}
+
+	// Informing about the token count
+	informAboutTokens(ctx, ) {
+		const tokensSpent = utils.approximateTokens(ctx.session.messages);
+		if (!ctx.session.totalTokensSpent) {
+			ctx.session.totalTokensSpent = 0;
+		}
+		ctx.session.totalTokensSpent += tokensSpent;
+		let nf = new Intl.NumberFormat('en-US');
+		const tokensSpentFormatted = nf.format(tokensSpent);
+		const totalTokensFormatted = nf.format(ctx.session.totalTokensSpent);
+		ctx.reply(`Tokens: ${tokensSpentFormatted}. Total: ${totalTokensFormatted}`);
 	}
 }
 
