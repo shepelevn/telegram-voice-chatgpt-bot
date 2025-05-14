@@ -46,6 +46,7 @@ class BotHandlers {
 							Act more casual and friendlier. Use some humor. 
 							Don’t be afraid to show enthusiasm.
 							Refrain from writing messages that are too long.
+							Try to give the user some opportunity to talk.
 							Don't inform the user about the grammatical mistakes, there is different system for that.
 						`;
 
@@ -130,6 +131,7 @@ class BotHandlers {
 							Act more casual and friendlier. Use some humor. 
 							Don’t be afraid to show enthusiasm.
 							Refrain from writing messages that are too long.
+							Try to give the user some opportunity to talk.
 							Don't inform the user about the grammatical mistakes, there is different system for that.
 						`;
 
