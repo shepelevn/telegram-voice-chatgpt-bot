@@ -150,7 +150,7 @@ There are no context messages.
 		const transcriptionMessageArray = [];
 		transcriptionMessageArray.push({role: this.roles.USER, content: processPrompt})
 
-		const response = await this.chat(transcriptionMessageArray, 'gpt-4o');
+		const response = await this.chat(transcriptionMessageArray, process.env.OPENAI_IMPORTANT_MODEL);
 		return response.content;
 	}
 

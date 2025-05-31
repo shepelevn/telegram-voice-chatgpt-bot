@@ -285,7 +285,7 @@ class BotHandlers {
 			"
 		`;
 
-		const isMistakesFoundResponse = await openAi.chatOneMessage(mistakesQuestionPrompt, 'gpt-4o');
+		const isMistakesFoundResponse = await openAi.chatOneMessage(mistakesQuestionPrompt, process.env.OPENAI_IMPORTANT_MODEL);
 		const isMistakesFoundString = isMistakesFoundResponse.content;
 
 		return isMistakesFoundString.toLowerCase().includes('yes');
@@ -303,7 +303,7 @@ class BotHandlers {
 			"
 		`;
 
-		return await openAi.chatOneMessage(mistakesQuestion, 'gpt-4o');
+		return await openAi.chatOneMessage(mistakesQuestion, process.env.OPENAI_IMPORTANT_MODEL);
 	}
 }
 
