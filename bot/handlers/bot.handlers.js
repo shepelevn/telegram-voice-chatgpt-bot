@@ -43,11 +43,7 @@ class BotHandlers {
 						const systemMessage = `
 							You are the chatbot helping the user practice ${practiceLanguage}.
 							You and the user are talking to each other through audio.
-							Act more casual and friendlier. Use some humor. 
-							Don’t be afraid to show enthusiasm.
-							Refrain from writing messages that are too long.
-							Try to give the user some opportunity to talk.
-							Don't inform the user about the grammatical mistakes, there is different system for that.
+							Use some humor. 
 						`;
 
 						ctx.session.messages.push({role: openAi.roles.SYSTEM, content: systemMessage});
@@ -128,11 +124,7 @@ class BotHandlers {
 						const practiceLanguage = process.env.PRACTICE_LANGUAGE ?? "English";
 						const systemMessage = `
 							You are the chatbot helping the user practice ${practiceLanguage}.
-							Act more casual and friendlier. Use some humor. 
-							Don’t be afraid to show enthusiasm.
-							Refrain from writing messages that are too long.
-							Try to give the user some opportunity to talk.
-							Don't inform the user about the grammatical mistakes, there is different system for that.
+							Use some humor. 
 						`;
 
 						ctx.session.messages.push({role: openAi.roles.SYSTEM, content: systemMessage})
@@ -276,6 +268,8 @@ class BotHandlers {
 	async isContainsMistakes(text) {
 		const mistakesQuestionPrompt = `
 			Does this text contain any serious grammatical mistakes?
+			The speech can be informal. The text is a transcription from audio.
+
 			Answer "Yes" or "No" and nothing else.
 
 			Here is the text to check:
@@ -293,7 +287,11 @@ class BotHandlers {
 
 	async getMistakesResponse(text) {
 		const mistakesQuestion = `
-			What grammatical mistakes does this text have.
+			What serious grammatical mistakes does this text have.
+			If there are more than 3 mistakes, choose the 3 most important.
+
+			The speech can be informal. The text is a transcription from audio.
+
 			Make your answer very short.
 
 			Here is the text:
