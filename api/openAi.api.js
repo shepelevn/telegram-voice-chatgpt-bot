@@ -91,7 +91,10 @@ class OpenAI {
 		let contextMessagesString = '';
 
 		for (const message of lastMessages) {
-			if (message.role === this.roles.USER) {
+			if (
+				message.role === this.roles.USER ||
+				message.role === this.roles.ASSISTANT
+			) {
 				contextMessagesString += `
 "
 ${message.content}
