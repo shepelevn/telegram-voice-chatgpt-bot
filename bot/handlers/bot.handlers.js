@@ -20,6 +20,15 @@ class BotHandlers {
 			try {
 				if (!ctx.session) ctx.session = telegramBot.SESSION
 
+				const tokensSpent = utils.approximateTokens(ctx.session.messages);
+
+				if (tokensSpent > Number(process.env.MAX_TOKENS_PER_MESSAGE ?? 20000)) {
+					await ctx.reply(code('Превышено максимальное количество токенов за одно сообщение. Сбросьте контекст.'));
+					Logger.info(`User: ${ctx.message.from.first_name} id: ${ctx.message.from.id}`, 'bot.handlers', '', 'max tokens per message reached', 'x');
+
+					return;
+				}
+
 				if (JSON.stringify(telegramBot.whitelist).includes(ctx.message.from.username)) {
 					// Getting the userID
 					const userId = String(ctx.message.from.id)
@@ -118,6 +127,15 @@ class BotHandlers {
 		telegramBot.bot.on(message('text'), async ctx => {
 			try {
 				if (!ctx.session) ctx.session = telegramBot.SESSION
+
+			  const tokensSpent = utils.approximateTokens(ctx.session.messages);
+
+				if (tokensSpent > Number(process.env.MAX_TOKENS_PER_MESSAGE ?? 20000)) {
+					await ctx.reply(code('Превышено максимальное количество токенов за одно сообщение. Сбросьте контекст.'));
+					Logger.info(`User: ${ctx.message.from.first_name} id: ${ctx.message.from.id}`, 'bot.handlers', '', 'max tokens per message reached', 'x');
+
+					return;
+				}
 
 				if (JSON.stringify(telegramBot.whitelist).includes(ctx.message.from.username)) {
 					if (ctx.session.messages.length === 0) {
