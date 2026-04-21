@@ -9,6 +9,7 @@ import {Logger} from "../utils/logger.utils.js";
 dotenv.config({ path: '.env' })
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const API_KEY = process.env.OPENAI_API_KEY
+const STT_LANGUAGE = process.env.OPENAI_STT_LANGUAGE ?? 'en';
 
 class OpenAI {
 	roles = {
@@ -56,7 +57,7 @@ class OpenAI {
 				// model: 'whisper-1',
 				model: model,
 				// TODO: Make it a setting
-				language: 'en',
+				language: STT_LANGUAGE,
 			});
 
 			return response.text
